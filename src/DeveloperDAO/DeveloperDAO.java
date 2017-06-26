@@ -23,7 +23,6 @@ public class DeveloperDAO implements InterfaceDAO {
         devToString += developer.getSalary() + "\n";
         try (FileOutputStream fileOutputStream = new FileOutputStream(file, true)) {
             fileOutputStream.write(devToString.getBytes());
-            System.out.println("Разработчик " + developer + " был добавлен.");
         } catch (NumberFormatException e) {
             e.getStackTrace();
         } catch (IOException e) {
@@ -32,18 +31,18 @@ public class DeveloperDAO implements InterfaceDAO {
     }
 
     @Override
-    public void update(Developer developer) {
-        //remove();
-        // save();
+    public void update(Developer developer) throws IOException {
+        remove(developer);
+         save(developer);
     }
 
     @Override
     public void remove(Developer developer) throws IOException {
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        List<String> list = new ArrayList<String>();
-        String currentLine;
+        List<String> list=new ArrayList<>();
         try {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String currentLine;
             while ((currentLine = bufferedReader.readLine()) != null) {
                 if (currentLine.isEmpty()) {
                     continue;
@@ -51,25 +50,30 @@ public class DeveloperDAO implements InterfaceDAO {
                 list.add(currentLine);
             }
             System.out.println(list);
-            list.remove(developer);
-            try (FileWriter fileWriter = new FileWriter(tempFile, true)) {
-                for (String line : list) {
+
+            list.remove(0);
+
+            try (FileWriter fileWriter=new FileWriter(tempFile,true)){
+                for (String line:list) {
+
                     fileWriter.write(line);
                     fileWriter.write(System.getProperty("line.separator"));
-
-                }
-                fileWriter.flush();
+                } fileWriter.flush();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        bufferedReader.close();
-        if (!file.delete()) {
-            System.out.println("Не удалось удалить файл1");
-            return;
-        }
-        if (!tempFile.renameTo(file)) {
-            System.out.println("Could not rename file");
+            catch (IOException e){e.getStackTrace();
+            }
+              fileReader.close();
+            bufferedReader.close();
+            if (!file.delete()){
+                System.out.println("Не удалось удалить файл1");
+                return;
+            }
+            if (!tempFile.renameTo(file)){
+                System.out.println("Could not rename file");
+            }
+
+        }catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -86,14 +90,20 @@ public class DeveloperDAO implements InterfaceDAO {
                     continue;
                 }
                 String[] arrayOfSplit = line.split(",");
-                if (Long.parseLong(arrayOfSplit[0]) == id) {
-                    developer.setId(Long.valueOf(arrayOfSplit[0]));
-                    developer.setFirstName(arrayOfSplit[1]);
-                    developer.setSecondName(arrayOfSplit[2]);
-                    developer.setExperience(Integer.valueOf(arrayOfSplit[3]));
-                    developer.setSalary(Integer.valueOf(arrayOfSplit[4]));
-                    System.out.println(developer);
+                while (Long.parseLong(arrayOfSplit[0]) != id) {
+                    if (Long.parseLong(arrayOfSplit[0]) == id) {
+                        developer.setId(Long.valueOf(arrayOfSplit[0]));
+                        developer.setFirstName(arrayOfSplit[1]);
+                        developer.setSecondName(arrayOfSplit[2]);
+                        developer.setExperience(Integer.valueOf(arrayOfSplit[3]));
+                        developer.setSalary(Integer.valueOf(arrayOfSplit[4]));
+                        System.out.println(developer);
 
+                    } else {
+                        System.out.println("Такого разработчика нету!");
+
+
+                    }
                 }
 
             }

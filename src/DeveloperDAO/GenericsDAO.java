@@ -9,7 +9,7 @@ import java.util.Collection;
 
 public interface GenericsDAO<T,ID>{
 void save(T entity);
-void update(T entity);
+void update(T entity) throws IOException;
 void remove (T entity) throws IOException;
 Developer getById(ID id);
 Collection<T> getAll();

@@ -5,8 +5,15 @@ public class Developer {
     private String secondName;
 private Integer experience;
 private Integer salary;
+private Object index;
 
+    public Object  getIndex() {
+        return index;
+    }
 
+    public void setIndex(Object index) {
+        this.index = index;
+    }
 
     public Developer() {
 
@@ -58,6 +65,7 @@ private Integer salary;
         this.secondName = secondName;
         this.experience = experience;
         this.salary = salary;
+
     }
 
     @Override
