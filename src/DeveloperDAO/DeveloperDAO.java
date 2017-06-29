@@ -6,10 +6,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Scanner;
 
 public class DeveloperDAO implements InterfaceDAO {
     private File file = new File("developers.txt");
     private File tempFile = new File("removeDev.txt");
+    private Scanner scn=new Scanner(System.in);
 
 
     @Override
@@ -33,7 +35,7 @@ public class DeveloperDAO implements InterfaceDAO {
     @Override
     public void update(Developer developer) throws IOException {
         remove(developer);
-         save(developer);
+
     }
 
     @Override
@@ -49,10 +51,15 @@ public class DeveloperDAO implements InterfaceDAO {
                 }
                 list.add(currentLine);
             }
-            System.out.println(list);
 
-            list.remove(0);
+try {
 
+    list.remove(Integer.parseInt(scn.next()));
+}catch (NumberFormatException e){
+    System.out.println("Введите индекс!");remove(developer);}
+    catch (IndexOutOfBoundsException i){
+        System.out.println("Под таким индексом нет разработчика!");remove(developer);
+    }
             try (FileWriter fileWriter=new FileWriter(tempFile,true)){
                 for (String line:list) {
 
@@ -65,7 +72,7 @@ public class DeveloperDAO implements InterfaceDAO {
               fileReader.close();
             bufferedReader.close();
             if (!file.delete()){
-                System.out.println("Не удалось удалить файл1");
+                System.out.println("Не удалось удалить файл!");
                 return;
             }
             if (!tempFile.renameTo(file)){

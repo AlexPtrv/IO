@@ -32,28 +32,16 @@ public class DeveloperController {
     }
 
     public void update() throws IOException {
-        remove();
-        try {
-            System.out.println();
-            System.out.println("Введите id :");
-            developer.setId(Long.parseLong(scn.next()));
-            System.out.println("Введите имя :");
-            developer.setFirstName(scn.next());
-            System.out.println("Введите фамилию :");
-            developer.setSecondName(scn.next());
-            System.out.println("Введите опыт работы:");
-            developer.setExperience(Integer.parseInt(scn.next()));
-            System.out.println("Введите зарплату :");
-            developer.setSalary(Integer.parseInt(scn.next()));
-            developerDAO.save(developer);
-        } catch (NumberFormatException e) {
-            e.getStackTrace();
-            add();
+        System.out.println("Введите индекс разработчика,которого хотите изменить:");
+        developerDAO.update(developer);
+        add();
 
-    }}
+    }
 
     public void remove() throws IOException {
+        System.out.println("Введите индекс разработчика,что бы удалить:");
 developerDAO.remove(developer);
+        System.out.println("Разработчик удален.");
     }
 
     public void getByID() {
